@@ -16,7 +16,7 @@ fprintf("Total tiles: %d\n", N);
 
 nShow = 16;
 img = h5read(file, '/input_images', [1 1 1], [cfg.tileSize cfg.tileSize, nShow]);
-mask - h5read(file, '\target_masks', [1 1 1], [cfg.tileSize cfg.tileSize nShow]);
+mask = h5read(file, '\target_masks', [1 1 1], [cfg.tileSize cfg.tileSize nShow]);
 
 img = permute(img, [2 1 3]);
 mask = permute(mask, [2 1 3 ]);

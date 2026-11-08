@@ -1,4 +1,4 @@
-function cfg = projcectConfig(body)
+function cfg = projectConfig(body)
 
 if nargin < 1, body = "moon"; end
 cfg.body = lower(string(body));
@@ -8,16 +8,21 @@ cfg.root = root;
 cfg.rawDir = fullfile(root, "data", cfg.body, "raw");
 cfg.tileDir = fullfile(root, "data", cfg.body, "tiles");
 cfg.modelDir = fullfile(root, "models", cfg.body);
-cfg.resultsDit = fullfile(root, "results", cfg.body);
+cfg.resultsDir = fullfile(root, "results", cfg.body);
 
 cfg.tileSize = 256;
 cfg.classNames = ["background", "crater"];
 cfg.labelIDs = [0 1];
+cfg.nTrain = 3000;
+cfg.nVal = 500;
+cfg.nTest = 500;
+cfg.outSize = 256;
+cfg.rimThickenPx = 1;
 
 switch cfg.body
     case "moon"
         cfg.dataset = "DeepMoon (LRO/Kaguya DEM)";
-        cfg.inputType - "DEM";
+        cfg.inputType = "DEM";
         base = "https://zenodo.org/record/1133969/files/";
         cfg.files = struct( ...
             "name", {"dev_images.hdf5","train_images.hdf5","test_images.hdf5"}, ...
