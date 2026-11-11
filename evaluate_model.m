@@ -20,15 +20,15 @@ fprintf("Tiles scored: %d\n", n);
 fprintf("Crater IoU %.3f | Precision %.3f | Recall %.3f | F1 %.3f\n", iou, precision, recall, f1);
 
 if ~isfolder(cfg.resultsDir), mkdir(cfg.resultsDir); end
-fig = figure("Visible", "off"); tiledlayout(3, 4, "TileSpacing", "compact");
+fig = figure("Visible", "off"); tiledlayout(4, 4, "TileSpacing", "compact");
 for k = 1:4
     I = imread(fullfile(imgDir, imgFiles(k).name));
     T = imread(fullfile(lblDir, imgFiles(k).name)) > 0;
     C = semanticseg(im2single(I(:,:,1)), net);
     nexttile; imshow(I);                                                title("Input");
-    nexttile; imshow(labeloverlay(I, T, Colormap=[1 0 0]));             title("Truth");
-    nexttile; imshow(labeloverlay(I, C == "crater", Colormap=[0 1 0])); title("Prediction");
-    nexttile; imshow(labeloverlay(I, (C=="crater") & ~T, Colormap=[1 1 0])); title("False pos.");
+    nexttile; imshow(labeloverlay(I, T, Colormap=[1, 0, 0]));             title("Truth");
+    nexttile; imshow(labeloverlay(I, C == "crater", Colormap=[0, 1, 0])); title("Prediction");
+    nexttile; imshow(labeloverlay(I, (C=="crater") & ~T, Colormap=[1, 1, 0])); title("False pos.");
 end
 exportgraphics(fig, fullfile(cfg.resultsDir, "predictions.png"));
 disp("Saved predictions.png in the results folder.");
