@@ -1,0 +1,9 @@
+function lgraph = buildUNet(cfg, classWeights)
+inputSize = [cfg.tileSize cfg.tileSize 1];
+lgraph = unetLayers(inputSize, numel(cfg.classNames), ...
+    EncoderDepth = cfg.encoderDepth, ...
+    NumFirstEncoderFilters = cfg.firstFilters);
+pxLayer = pixelClassificationLayer(Name = "labels", ...
+    Classes = cellstr(cfg.classNames), ClassWeights = classWeights(:));
+lgraph = replaceLayer(lgraph, "Segmentation-Layer", pxLayer);
+end

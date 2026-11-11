@@ -1,39 +1,40 @@
 function cfg = projectConfig(body)
-
+% Central settings. To add a new planet, add a case below.
 if nargin < 1, body = "moon"; end
 cfg.body = lower(string(body));
 
 root = fileparts(mfilename('fullpath'));
 cfg.root = root;
-cfg.rawDir = fullfile(root, "data", cfg.body, "raw");
-cfg.tileDir = fullfile(root, "data", cfg.body, "tiles");
-cfg.modelDir = fullfile(root, "models", cfg.body);
+dataRoot = getenv("CRATER_DATA");
+if isempty(dataRoot), dataRoot = fullfile(root, "data"); end
+cfg.rawDir     = fullfile(dataRoot, cfg.body, "raw");
+cfg.tileDir    = fullfile(dataRoot, cfg.body, "tiles");
+cfg.modelDir   = fullfile(root, "models", cfg.body);
 cfg.resultsDir = fullfile(root, "results", cfg.body);
 
-cfg.tileSize = 256;
-cfg.classNames = ["background", "crater"];
-cfg.labelIDs = [0 1];
-cfg.nTrain = 3000;
-cfg.nVal = 500;
-cfg.nTest = 500;
-cfg.outSize = 256;
+cfg.tileSize   = 256;
+cfg.classNames = ["background" "crater"];
+cfg.labelIDs   = [0 1];
 cfg.rimThickenPx = 1;
+
+% Training settings (small values for a first CPU run)
+cfg.trainSubset   = 400;
+cfg.valSubset     = 100;
+cfg.evalTiles     = 100;
+cfg.encoderDepth  = 3;
+cfg.firstFilters  = 16;
+cfg.batchSize     = 8;
+cfg.maxEpochs     = 2;
+cfg.learnRate     = 1e-3;
+cfg.checkpointDir = fullfile(cfg.modelDir, "checkpoints");
 
 switch cfg.body
     case "moon"
-        cfg.dataset = "DeepMoon (LRO/Kaguya DEM)";
+        cfg.dataset   = "DeepMoon (LRO/Kaguya DEM)";
         cfg.inputType = "DEM";
-        base = "https://zenodo.org/record/1133969/files/";
-        cfg.files = struct( ...
-            "name", {"dev_images.hdf5","train_images.hdf5","test_images.hdf5"}, ...
-            "url",  {base+"dev_images.hdf5?download=1", ...
-                     base+"train_images.hdf5?download=1", ...
-                     base+"test_images.hdf5?download=1"});
     case "mars"
-        % placeholder for future datasets
-        error("Mars not configured yet. Add dataset details in projectConfig.m")
-    otherwise 
+        error("Mars not configured yet. Add dataset details in projectConfig.m");
+    otherwise
         error("Unknown body: %s", body);
-    
-end 
+end
 end
