@@ -18,13 +18,13 @@ cfg.labelIDs   = [0 1];
 cfg.rimThickenPx = 1;
 
 % Training settings (small values for a first CPU run)
-cfg.trainSubset   = 400;
-cfg.valSubset     = 100;
-cfg.evalTiles     = 100;
+cfg.trainSubset = 3000;
+cfg.valSubset   = 200;
+cfg.evalTiles   = 500;
+cfg.maxEpochs   = 10;
 cfg.encoderDepth  = 3;
 cfg.firstFilters  = 16;
 cfg.batchSize     = 8;
-cfg.maxEpochs     = 2;
 cfg.learnRate     = 1e-3;
 cfg.checkpointDir = fullfile(cfg.modelDir, "checkpoints");
 
